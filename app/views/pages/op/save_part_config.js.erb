@@ -1,0 +1,18 @@
+
+<%#= puts @part.inspect %>
+
+console.log('save_part_config OK');
+//console.log($('#<%#= 'part_'+@part_id %>'));
+
+
+<% text = escape_javascript render(partial: 'blk/render_block', locals: {
+	edit: true,
+	part: @part
+}) %>
+
+$("#<%= 'part_'+@part_id %>").replaceWith("<%= text %>");
+//$("#<%= 'part_'+@part_id %>").replaceWith("QQQQQQQQQQQQQQQQQQ");
+
+//console.log('save_part_config OK');
+//console.log($("#<%= 'part_'+@part_id %>"));
+

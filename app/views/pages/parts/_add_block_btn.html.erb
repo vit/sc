@@ -1,0 +1,29 @@
+<center id="<%= html_id %>">
+
+<div class="btn-group">
+  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Add Block <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+<%
+	blocks_list = [
+		{name: 'Cover', type: 'cover'},
+#		{name: 'Text', type: 'text'},
+#		{name: 'Gallery', type: 'gallery'}
+	]
+%>
+<% blocks_list.each do |b| %>
+	<li><%= link_to(b[:name], page_path(@page, op: :add_block, block_type: b[:type], after_id: html_id, after_part: nil), method: :put, remote: true) %></li>
+<% end %>
+  </ul>
+</div>
+<script>
+$(function () {
+    $('#<%= html_id %> ul.dropdown-menu a[data-remote=true]').click(function () {
+        $(this).closest('ul').prev('button').dropdown('toggle');
+    });
+});
+</script>
+
+</center>
+

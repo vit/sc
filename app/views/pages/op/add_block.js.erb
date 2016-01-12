@@ -1,0 +1,19 @@
+
+//$('#submission').html("<%#= escape_javascript render('submission_show') %>");
+
+//$('#message').html("Message Ok!");
+
+//$('#<%= @after_id %>').after("<%#= escape_javascript render('submission_show') %>");
+
+
+<%
+#	block_path = 'blk/'+@part.block_type
+%>
+
+<% text = escape_javascript render(partial: 'blk/render_block', locals: {
+	edit: true,
+	part: @part
+}) %>
+
+$('#<%= @after_id %>').after("<%= text %>");
+

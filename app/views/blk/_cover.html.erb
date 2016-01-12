@@ -1,0 +1,68 @@
+
+<%
+	blk_style = ""
+puts "========================"
+puts args
+puts "========================"
+	if args && styles=args['styles']
+		#styles.each do |i,s|
+		styles.each do |s|
+			case s['name']
+			when "background-color"
+				blk_style << "background-color: #{s['value']};"
+			end if s.is_a? Hash
+		end if styles.is_a? Array
+	end
+puts "??????????"
+puts blk_style
+puts "??????????"
+
+
+=begin
+	if args && (styles=args['styles'])
+		if args[:bg_image_url]
+			blk_style << "background-image: url(#{args[:bg_image_url]});"
+		end
+		if styles[:background_color]
+			blk_style << "background-color: #{args[:background_color]};"
+		end
+		if args[:color]
+			blk_style << "color: #{args[:color]};"
+		end
+		if args[:shadow_color]
+			blk_style << "text-shadow: -1px -1px 1px #{args[:shadow_color]};"
+		end
+	end
+=end
+%>
+
+<!--div id="part_<%= id %>" class="container-fluid blk">
+
+<div class="blk-inner-menu">
+	<%#= link_to( page_path(@page, op: :remove_block, block_id: id), method: :put, remote: true) do %>
+	[x]
+	<%# end %>
+</div-->
+
+	<div class="row">
+		<div class="col-md-12 jumbotron blk-cover" style="<%= blk_style %>">
+		<!--div class="layer-1">
+		</div>
+		<div class="layer-2"-->
+			<div class="text-center">
+				<div class="row">
+					<div class="col-md-offset-2 col-md-8">
+						<h4 data-content=subtitle><%= content ? content[:subtitle].to_s.with_br : '' %></h4>
+						<h1 data-content=title><%= content ? content[:title].to_s.with_br : '' %></h1>
+						<p data-content=text><%= content ? content[:text].to_s.with_br : '' %></p>
+					</div>
+				</div>
+			</div>
+		<!--/div-->
+		</div>
+	</div>
+
+
+
+<!--/div-->
+

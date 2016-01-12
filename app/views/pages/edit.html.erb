@@ -1,0 +1,58 @@
+<!--h1>Editing Page</h1-->
+
+<%#= render 'form' %>
+
+<%= link_to 'Show', @page %> |
+<%= link_to 'Back', pages_path %>
+
+
+
+
+
+
+
+<%= render partial: 'pages/parts/add_block_btn', locals: {html_id: 'add_block_btn_first'} %>
+
+
+<% @page.get_parts.each do |part| %>
+	<%= render(partial: 'blk/render_block', locals: {
+		edit: true,
+		part: part
+	}) %>
+<% end %>
+
+
+
+	<%#= button_to t(:add_block), '#', :onclick => "$('#left_panel').fadeIn(); return false;", :type => "button", :class => "btn btn-primary" %>
+	<%#= button_to "Add Block", '#', :onclick => "$('#left_panel').fadeIn(1000); return false;", :type => "button", :class => "btn btn-primary" %>
+	<%#= link_to "Add Block", '#', :oonclick => "console.log('btn clicked'); $('#left_panel').fadeIn(1000); return false;", :type => "button", :class => "btn btn-primary" %>
+
+<!--script>
+$('a').click(function(evt) {
+	console.log('btn clicked');
+	$('#left_panel').fadeIn(1000);
+	evt.stopPropagation();
+});
+$('body').click(function(evt){    
+	console.log('body clicked');
+       if(evt.target.id == "left_panel")
+          return;
+       //For descendants of menu_content being clicked, remove this check if you do not want to put constraint on descendants.
+       if($(evt.target).closest('#left_panel').length)
+          return;             
+
+      //Do processing of click event here for every element except with id menu_content
+	$('#left_panel').fadeOut(1000);
+
+});
+</script-->
+
+<div id="left_panel">
+	<div class="content">
+	</div>
+</div>
+
+
+
+
+

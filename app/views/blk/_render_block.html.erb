@@ -1,0 +1,252 @@
+
+<%
+	edit = defined?(edit) ? edit : false
+%>
+
+<div id="part_<%= part._id %>" class="container-fluid blk">
+
+<% if edit %>
+	<div class="blk-inner-menu btn-group">
+		<%= button_tag( type: 'button', class: 'btn btn-primary btn-sm', title: 'Edit properties', 'data-toggle': "modal", 'data-target': "#modal_"+part._id) do %>
+		<i class="fa fa-pencil"></i>
+		<% end %>
+		<%#= link_to( page_path(@page, op: :block_edit, block_id: part._id), mmethod: :put, rremote: true, class: 'btn btn-primary btn-sm', title: 'Edit properties', 'data-toggle': "modal", 'data-target': "#myModal") do %>
+		<!--i class="fa fa-pencil"></i-->
+		<%# end %>
+		<%= link_to( page_path(@page, op: :move_down, block_id: part._id), method: :put, remote: true, class: 'btn btn-primary btn-sm', title: 'Down') do %>
+		<i class="fa fa-arrow-down"></i>
+		<% end %>
+		<%= link_to( page_path(@page, op: :move_up, block_id: part._id), method: :put, remote: true, class: 'btn btn-primary btn-sm', title: 'Up') do %>
+		<i class="fa fa-arrow-up"></i>
+		<% end %>
+		<%= link_to( page_path(@page, op: :remove_block, block_id: part._id), method: :put, remote: true, data: {confirm: 'Are you sure?'}, class: 'btn btn-danger btn-sm', title: 'Delete') do %>
+		<i class="fa fa-remove"></i>
+		<% end %>
+	</div>
+
+<div class="modal fade" id="modal_<%= part._id %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-md-6">Background color: </div>
+          <div class="col-md-6">
+				<input data-input="background-color" type="text" value="#5367ce" class="form-control colorpicker" style="width: 100%"/>
+		</div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary save-btn">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+$('#modal_<%= part._id %> .save-btn').click(function(evt){
+	$('#modal_<%= part._id %>').modal('hide').on('hidden.bs.modal', function (e) {
+		var config = {
+			//'styles[]': [
+			'styles': [
+			]
+		}
+		$('#modal_<%= part._id %> [data-input]').each(function(ind, elm) {
+			var e = $(elm);
+			var name = e.data('input');
+			var val = e.val();
+			//console.log(elm);
+			//console.log(e);
+		//	console.log(name, val);
+			//config['styles[]'].push({name: name, value: val});
+			config['styles'].push({name: name, value: val});
+		});
+		//console.log(config);
+
+///*
+		$.ajax({
+			type: "PUT",
+			url: "<%= page_path(@page) %>",
+			//data: { op: 'save_part_config', part_id: '<%= part._id %>', config: config },
+			data: { op: 'save_part_config', part_id: '<%= part._id %>', config: JSON.stringify(config) },
+	//		data: JSON.stringify({ op: 'save_part_config', part_id: '<%= part._id %>', config: config }),
+//			dataType: "json",
+			dataType: "script",
+			success: function(data) {
+		//		console.log("success");
+		//		console.log(data);
+		//		console.log(data.responseText);
+				return false
+			},
+			error: function(data) {
+		//		console.log("error");
+//				console.log(data);
+		//		console.log(data.responseText);
+				return false
+			}
+		});
+//*/
+
+	});
+});
+</script>
+
+
+<% end %>
+
+<%
+	block_path = 'blk/'+part.block_type
+%>
+	<%= render(partial: block_path, locals: {
+		#id: 'part_'+part._id,
+		id: part._id,
+		args: part.config,
+		#content: part.content.merge({text: 'rjq rhlri hrthwero ygyugi ge erq wrygweriygw riuyweg riwu qwieu gyqwie uqwyg iqweyrg iqwuryg qwiur gqiitg ityit'})
+		content: part.content
+	}) %>
+
+
+
+<% if edit %>
+<script>
+
+	$('#part_<%= part._id %> .colorpicker').colorpicker().on('changeColor.colorpicker', function(event){
+	//	console.log(event);
+	//	console.log(event.color.toRGB());
+	//	console.log($(event.currentTarget).val());
+	//  $(event.currentTarget).backgroundColor = event.color.toHex();
+	//  $(event.currentTarget).css('background-color', event.color.toRGB());
+	  $(event.currentTarget).css('background-color', $(event.currentTarget).val());
+	});
+
+	//$('#part_<%= part._id %> .minicolors').minicolors({
+	//	format: 'rgb',
+	//	opacity: '0.5',
+	//	theme: 'bootstrap'
+	//});
+
+	$('#part_<%= part._id %> [data-content]').attr('contenteditable', true);
+
+	$('#part_<%= part._id %> [data-content]').on('focus', function() {
+		var $this = $(this);
+		$this.data('before', $this.html());
+		return $this;
+	//}).on('blur keyup paste', function() {
+	}).on('blur', function() {
+		var $this = $(this);
+		if ($this.data('before') !== $this.html()) {
+			$this.data('before', $this.html());
+			$this.trigger('change');
+		}
+		return $this;
+	});
+
+	//$('#part_<%= part._id %> [data-content]').focusout(function(e) {
+	$('#part_<%= part._id %> [data-content]').change(function(e) {
+
+		var content = {};
+		$('#part_<%= part._id %> [data-content]').each(function(k,v) {
+			var elm = $(v);
+			var name = elm.attr('data-content');
+			var value = elm.text();
+/*
+			var html_value = elm.html();
+			content[name] = value;
+			//console.log(html_value);
+		//	console.log(v.innerText);
+
+
+			var h = v.innerHtml;
+
+			var t = elm.html().trim()
+   .replace(/<br(\s*)\/*>/ig, '\n') // replace single line-breaks
+   .replace(/<[p|div]\s/ig, '\n$0') // add a line break before all div and p tags
+   .replace(/(<([^>]+)>)/ig, "");   // remove any remaining tags
+
+		//	var t = extractTextWithWhitespace( elm );
+
+			//var t = elm.textContent || elm.innerText;
+			//var t = v.textContent || v.innerText;
+*/
+			var t = v.innerText || v.textContent;
+			content[name] = t;
+
+
+			//console.log(v.innerText);
+			//console.log(t);
+		});
+
+		$.ajax({
+			type: "PUT",
+			url: "<%= page_path(@page) %>",
+			data: { op: 'save_part_content', part_id: '<%= part._id %>', content: content },
+			success: function(data) {
+				return false
+			},
+			error: function(data) {
+				return false
+			}
+		});
+
+	});
+
+
+
+function extractTextWithWhitespace( elems ) {
+    var ret = "", elem;
+
+    for ( var i = 0; elems[i]; i++ ) {
+        elem = elems[i];
+
+        // Get the text from text nodes and CDATA nodes
+        if ( elem.nodeType === 3 || elem.nodeType === 4 ) {
+            ret += elem.nodeValue + "\n";
+
+        // Traverse everything else, except comment nodes
+        } else if ( elem.nodeType !== 8 ) {
+            ret += extractTextWithWhitespace( elem.childNodes );
+        }
+    }
+
+    return ret;
+}
+
+
+
+
+//$('#part_<%= part._id %> [data-content]').text('erqw rhwwer wegr iuwyeg iqwuyreg qiwurygq iwreugqrwiugqiuyg');
+//alert('werqwrqet');
+
+/*
+$("#navbar_1 a").on('click', function(event){
+
+  // Prevent default anchor click behavior
+  event.preventDefault();
+
+  // Store hash (#)
+  var hash = this.hash;
+
+  // Using jQuery's animate() method to add smooth page scroll
+  // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area (the speed of the animation)
+  $('html, body').animate({
+    scrollTop: $(hash).offset().top
+  }, 800, function(){
+
+    // Add hash (#) to URL when done scrolling (default click behavior)
+    window.location.hash = hash;
+  });
+});
+*/
+</script>
+<% end %>
+
+
+</div>
+

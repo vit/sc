@@ -1,0 +1,19 @@
+<!--p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%#= @page.name %>
+</p>
+
+<%#= link_to 'Edit', edit_page_path(@page) %> |
+<%#= link_to 'Back', pages_path %>
+
+-->
+
+<% @page.get_parts.each do |part| %>
+	<%= render(partial: 'blk/render_block', locals: {
+	#	edit: false,
+		part: part
+	}) %>
+<% end %>
+
