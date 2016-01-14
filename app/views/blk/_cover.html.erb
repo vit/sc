@@ -58,7 +58,7 @@ puts "========================"
 			when "text-shadow"
 				blk_style << "text-shadow: -1px -1px 1px #000000;" if s[:value]=="1"
 			when "gradient"
-				layer_1_style << "background: linear-gradient(to top, rgba(0,0,0,0), rgba(0,0,0,1));" if s[:value]=="1"
+				layer_1_style << "background: linear-gradient(to top, rgba(0,0,0,0.1), rgba(0,0,0,0.8));" if s[:value]=="1"
 			end if s.is_a? Hash
 		end
 #	end
