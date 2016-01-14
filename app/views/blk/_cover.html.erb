@@ -1,18 +1,67 @@
-
 <%
+
+	args_h = args['config'].is_a?(Array) ? (args['config'].inject({}) do |acc,e|
+		acc[e['name']]=e['value']
+		acc
+	end) : {}
+
+	@_blk_args = [
+		{name: "background-color", label: t("background_color"), type: 'color', value: "#d0d0d0"},
+		{name: "background-image", label: t("background_image"), type: 'url', value: ""},
+		{name: "background-fixed", label: t("background_fixed"), type: 'boolean', value: "0"},
+		{name: "text-color", label: t("text_color"), type: 'color', value: "#ffffff"},
+		{name: "text-shadow", label: t("text_shadow"), type: 'boolean', value: "0"},
+		{name: "gradient", label: t("gradient"), type: 'boolean', value: "0"}
+	]
+
+	@_blk_args.each do |a|
+		a[:value] = args_h[a[:name]] if args_h[a[:name]]
+	end
+
+
 	blk_style = ""
+	layer_1_style = ""
 puts "========================"
-puts args
+puts args_h
 puts "========================"
-	if args && styles=args['styles']
-		#styles.each do |i,s|
-		styles.each do |s|
+#	if args && styles=args['styles']
+#	if args && styles=args['config']
+=begin
+#		styles.each do |s|
+		@_blk_args.each do |s|
 			case s['name']
 			when "background-color"
 				blk_style << "background-color: #{s['value']};"
+			when "background-image"
+				blk_style << "background-image: url(#{s['value']});" if s['value'].is_a?(String) and s['value'].length>0
+			when "background-fixed"
+				blk_style << (s['value']=="1" ? "background-attachment: fixed;" : "background-attachment: scroll;")
+			when "text-color"
+				blk_style << "color: #{s['value']};"
+			when "text-shadow"
+				blk_style << "text-shadow: -1px -1px 1px #000000;"
+			when "gradient"
+				layer_1_style << "background: linear-gradient(to top, rgba(0,0,0,0), rgba(0,0,0,1));" if s['value']=="1"
 			end if s.is_a? Hash
 		end if styles.is_a? Array
-	end
+=end
+		@_blk_args.each do |s|
+			case s[:name]
+			when "background-color"
+				blk_style << "background-color: #{s[:value]};"
+			when "background-image"
+				blk_style << "background-image: url(#{s[:value]});" if s[:value].is_a?(String) and s[:value].length>0
+			when "background-fixed"
+				blk_style << (s[:value]=="1" ? "background-attachment: fixed;" : "background-attachment: scroll;")
+			when "text-color"
+				blk_style << "color: #{s[:value]};"
+			when "text-shadow"
+				blk_style << "text-shadow: -1px -1px 1px #000000;" if s[:value]=="1"
+			when "gradient"
+				layer_1_style << "background: linear-gradient(to top, rgba(0,0,0,0), rgba(0,0,0,1));" if s[:value]=="1"
+			end if s.is_a? Hash
+		end
+#	end
 puts "??????????"
 puts blk_style
 puts "??????????"
@@ -46,9 +95,9 @@ puts "??????????"
 
 	<div class="row">
 		<div class="col-md-12 jumbotron blk-cover" style="<%= blk_style %>">
-		<!--div class="layer-1">
+		<div class="layer-1" style="<%= layer_1_style %>">
 		</div>
-		<div class="layer-2"-->
+		<div class="layer-2">
 			<div class="text-center">
 				<div class="row">
 					<div class="col-md-offset-2 col-md-8">
@@ -58,7 +107,7 @@ puts "??????????"
 					</div>
 				</div>
 			</div>
-		<!--/div-->
+		</div>
 		</div>
 	</div>
 
