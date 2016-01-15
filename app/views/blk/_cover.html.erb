@@ -6,6 +6,8 @@
 	end) : {}
 
 	@_blk_args = [
+		{name: "anchor-name", label: t("anchor_name"), type: 'string', value: ""},
+		{name: "min-height", label: t("min_height"), type: 'string', value: "100vh"},
 		{name: "background-color", label: t("background_color"), type: 'color', value: "#d0d0d0"},
 		{name: "background-image", label: t("background_image"), type: 'url', value: ""},
 		{name: "background-fixed", label: t("background_fixed"), type: 'boolean', value: "0"},
@@ -21,6 +23,7 @@
 
 	blk_style = ""
 	layer_1_style = ""
+	anchor_name = ""
 puts "========================"
 puts args_h
 puts "========================"
@@ -47,6 +50,10 @@ puts "========================"
 =end
 		@_blk_args.each do |s|
 			case s[:name]
+			when "anchor-name"
+				anchor_name = s[:value]
+			when "min-height"
+				blk_style << "min-height: #{s[:value]};"
 			when "background-color"
 				blk_style << "background-color: #{s[:value]};"
 			when "background-image"
@@ -92,7 +99,9 @@ puts "??????????"
 	[x]
 	<%# end %>
 </div-->
-
+	<% if anchor_name.is_a?(String) and anchor_name.length>0 %>
+		<a name="<%= anchor_name %>" />
+	<% end %>
 	<div class="row">
 		<div class="col-md-12 jumbotron blk-cover" style="<%= blk_style %>">
 		<div class="layer-1" style="<%= layer_1_style %>">

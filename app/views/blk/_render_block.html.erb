@@ -51,6 +51,13 @@
 									<input name="<%= a[:name] %>" data-input="<%= a[:name] %>" type="text" value="<%= a[:value] %>" class="form-control colorpicker" style="width: 100%"/>
 								</div>
 							</div>
+							<% when 'string' %>
+							<div class="row">
+								<div class="col-md-6"><%= a[:label] %>: </div>
+								<div class="col-md-6">
+									<input name="<%= a[:name] %>" data-input="<%= a[:name] %>" type="text" value="<%= a[:value] %>" class="form-control" style="width: 100%"/>
+								</div>
+							</div>
 							<% when 'url' %>
 							<div class="row">
 								<div class="col-md-6"><%= a[:label] %>: </div>
